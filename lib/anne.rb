@@ -1,5 +1,7 @@
 require 'anne/version'
 
 module Anne
-  # Your code goes here...
+  def ann
+  end
+  alias anne ann
 end
