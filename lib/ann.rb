@@ -6,6 +6,10 @@ module Ann
     klass.extend ClassMethods
   end
 
+  def annotations_for(name)
+    self.class.annotations_for(name)
+  end
+
   module ClassMethods
     Descriptor = Struct.new(:klass, :args)
 

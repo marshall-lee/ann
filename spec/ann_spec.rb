@@ -129,4 +129,21 @@ describe Ann do
       expect(klass.annotations_for(:meth)).to eq [ann_klass.new(klass, :meth, 123, 456)]
     end
   end
+
+  describe '#annotations_for' do
+    let(:ann_klass) { Struct.new(:klass, :method, :a, :b) }
+
+    before do
+      ann_klass = self.ann_klass
+      klass.class_eval do
+        ann ann_klass, 123, 456
+        def meth
+        end
+      end
+    end
+
+    it 'returns method annotations' do
+      expect(klass.new.annotations_for(:meth)).to eq [ann_klass.new(klass, :meth, 123, 456)]
+    end
+  end
 end
