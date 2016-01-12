@@ -12,7 +12,7 @@ module Anne
   alias ann anne
 
   def annotations
-    @annotations ||= {}
+    @annotations ||= Hash.new { |hash, key| hash[key] = [] }
   end
 
   def annotations_for(name)
@@ -23,7 +23,6 @@ module Anne
     method_anns = (Thread.current[:anne_descriptors] || []).map do |desc|
       desc.klass.new(*desc.args)
     end
-    annotations[name] ||= []
     annotations[name].concat(method_anns)
 
     Thread.current[:anne_descriptors] = nil
