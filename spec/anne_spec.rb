@@ -54,6 +54,49 @@ describe Anne do
       it 'should store annotation instance in the list' do
         expect(klass.anne[:frank]).to contain_exactly(ann_klass.new(123, 456))
       end
+
+      context 'in the inherited class' do
+        let(:subclass) { Class.new(klass) }
+
+        it 'should be able to get inherited annotations' do
+          expect(subclass.anne[:frank]).to contain_exactly(ann_klass.new(123, 456))
+        end
+
+        context 'when overriding a method' do
+          let(:ann_klass1) { Struct.new(:x, :y) }
+          let(:subclass1) do
+            ann_klass = self.ann_klass1
+            Class.new(klass) do
+              ann ann_klass, :foo, :bar
+              def frank
+                super
+              end
+            end
+          end
+
+          let(:ann_klass2) { Struct.new(:s, :t) }
+          let(:subclass2) do
+            ann_klass = self.ann_klass2
+            Class.new(klass) do
+              ann ann_klass, 'xx', 'yy'
+              def frank
+                super
+              end
+            end
+          end
+
+          it 'adds new annotations on top of inherited' do
+            expect(subclass1.anne[:frank]).to contain_exactly(
+              ann_klass.new(123, 456),
+              ann_klass1.new(:foo, :bar)
+            )
+            expect(subclass2.anne[:frank]).to contain_exactly(
+              ann_klass.new(123, 456),
+              ann_klass2.new('xx', 'yy')
+            )
+          end
+        end
+      end
     end
   end
 end

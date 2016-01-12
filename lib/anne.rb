@@ -24,4 +24,11 @@ module Anne
 
     Thread.current[:anne_descriptors] = nil
   end
+
+  def inherited(subclass)
+    parent = self
+    subclass.class_eval do
+      @anne = Hash[parent.anne.map { |name, anns| [name, anns.dup] }]
+    end
+  end
 end
