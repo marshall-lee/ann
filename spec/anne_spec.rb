@@ -24,4 +24,36 @@ describe Anne do
       expect(klass).to respond_to(:ann)
     end
   end
+
+  describe '.ann' do
+    context 'method without annotations' do
+      before do
+        klass.class_eval do
+          def frank
+          end
+        end
+      end
+
+      it 'should store annotation instance in the list' do
+        expect(klass.anne[:frank]).to eq []
+      end
+    end
+
+    context 'with one annotation for method' do
+      let(:ann_klass) { Struct.new(:a, :b) }
+
+      before do
+        ann_klass = self.ann_klass
+        klass.class_eval do
+          ann ann_klass, 123, 456
+          def frank
+          end
+        end
+      end
+
+      it 'should store annotation instance in the list' do
+        expect(klass.anne[:frank]).to contain_exactly(ann_klass.new(123, 456))
+      end
+    end
+  end
 end
