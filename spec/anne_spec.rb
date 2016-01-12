@@ -41,7 +41,7 @@ describe Anne do
     end
 
     context 'with one annotation for method' do
-      let(:ann_klass) { Struct.new(:a, :b) }
+      let(:ann_klass) { Struct.new(:klass, :method, :a, :b) }
 
       before do
         ann_klass = self.ann_klass
@@ -53,7 +53,17 @@ describe Anne do
       end
 
       it 'should store annotation instance in the list' do
-        expect(otto[:frank]).to contain_exactly(ann_klass.new(123, 456))
+        expect(otto[:frank]).to contain_exactly(ann_klass.new(klass, :frank, 123, 456))
+      end
+
+      it 'passes class and method name along with an arguments to annotations class constructor' do
+        ann_klass = self.ann_klass
+        expect(ann_klass).to receive(:new).with(klass, :frank, 123, 456)
+        klass.class_eval do
+          ann ann_klass, 123, 456
+          def frank
+          end
+        end
       end
 
       context 'in the inherited class' do
@@ -61,11 +71,11 @@ describe Anne do
         let(:anne) { subclass.annotations }
 
         it 'should be able to get inherited annotations' do
-          expect(anne[:frank]).to contain_exactly(ann_klass.new(123, 456))
+          expect(anne[:frank]).to contain_exactly(ann_klass.new(klass, :frank, 123, 456))
         end
 
         context 'when overriding a method' do
-          let(:ann_klass1) { Struct.new(:x, :y) }
+          let(:ann_klass1) { Struct.new(:klass, :method, :x, :y) }
           let(:subclass1) do
             ann_klass = self.ann_klass1
             Class.new(klass) do
@@ -77,7 +87,7 @@ describe Anne do
           end
           let(:anne) { subclass1.annotations }
 
-          let(:ann_klass2) { Struct.new(:s, :t) }
+          let(:ann_klass2) { Struct.new(:klass, :method, :s, :t) }
           let(:subclass2) do
             ann_klass = self.ann_klass2
             Class.new(klass) do
@@ -91,12 +101,12 @@ describe Anne do
 
           it 'adds new annotations on top of inherited' do
             expect(anne[:frank]).to contain_exactly(
-              ann_klass.new(123, 456),
-              ann_klass1.new(:foo, :bar)
+              ann_klass.new(klass, :frank, 123, 456),
+              ann_klass1.new(subclass1, :frank, :foo, :bar)
             )
             expect(margot[:frank]).to contain_exactly(
-              ann_klass.new(123, 456),
-              ann_klass2.new('xx', 'yy')
+              ann_klass.new(klass, :frank, 123, 456),
+              ann_klass2.new(subclass2, :frank, 'xx', 'yy')
             )
           end
         end
@@ -105,7 +115,7 @@ describe Anne do
   end
 
   describe '.annotations_for' do
-    let(:ann_klass) { Struct.new(:a, :b) }
+    let(:ann_klass) { Struct.new(:klass, :method, :a, :b) }
 
     before do
       ann_klass = self.ann_klass
@@ -117,7 +127,7 @@ describe Anne do
     end
 
     it 'returns method annotations' do
-      expect(klass.annotations_for(:meth)).to eq [ann_klass.new(123, 456)]
+      expect(klass.annotations_for(:meth)).to eq [ann_klass.new(klass, :meth, 123, 456)]
     end
   end
 end

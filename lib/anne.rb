@@ -21,7 +21,7 @@ module Anne
 
   def method_added(name)
     method_anns = (Thread.current[:anne_descriptors] || []).map do |desc|
-      desc.klass.new(*desc.args)
+      desc.klass.new(self, name, *desc.args)
     end
     annotations[name].concat(method_anns)
 
