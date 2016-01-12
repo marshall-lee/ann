@@ -7,17 +7,20 @@ describe Ann do
 
   let(:klass) do
     Class.new do
-      extend Ann
+      include Ann
     end
   end
 
-  describe 'class with Ann mixin' do
-    it 'should be a kind of Ann' do
-      expect(klass).to be_kind_of(Ann)
-    end
+  describe 'class' do
 
     it 'should respond to method ann' do
       expect(klass).to respond_to(:ann)
+    end
+  end
+
+  describe 'class instance' do
+    it 'should be a kind of Ann' do
+      expect(klass.new).to be_kind_of(Ann)
     end
   end
 
