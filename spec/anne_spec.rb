@@ -26,6 +26,7 @@ describe Anne do
   end
 
   describe '.ann' do
+    let(:otto) { klass.annotations }
     context 'method without annotations' do
       before do
         klass.class_eval do
@@ -35,7 +36,7 @@ describe Anne do
       end
 
       it 'should store annotation instance in the list' do
-        expect(klass.anne[:frank]).to eq []
+        expect(otto[:frank]).to eq []
       end
     end
 
@@ -52,14 +53,15 @@ describe Anne do
       end
 
       it 'should store annotation instance in the list' do
-        expect(klass.anne[:frank]).to contain_exactly(ann_klass.new(123, 456))
+        expect(otto[:frank]).to contain_exactly(ann_klass.new(123, 456))
       end
 
       context 'in the inherited class' do
         let(:subclass) { Class.new(klass) }
+        let(:anne) { subclass.annotations }
 
         it 'should be able to get inherited annotations' do
-          expect(subclass.anne[:frank]).to contain_exactly(ann_klass.new(123, 456))
+          expect(anne[:frank]).to contain_exactly(ann_klass.new(123, 456))
         end
 
         context 'when overriding a method' do
@@ -73,6 +75,7 @@ describe Anne do
               end
             end
           end
+          let(:anne) { subclass1.annotations }
 
           let(:ann_klass2) { Struct.new(:s, :t) }
           let(:subclass2) do
@@ -84,19 +87,37 @@ describe Anne do
               end
             end
           end
+          let(:margot) { subclass2.annotations }
 
           it 'adds new annotations on top of inherited' do
-            expect(subclass1.anne[:frank]).to contain_exactly(
+            expect(anne[:frank]).to contain_exactly(
               ann_klass.new(123, 456),
               ann_klass1.new(:foo, :bar)
             )
-            expect(subclass2.anne[:frank]).to contain_exactly(
+            expect(margot[:frank]).to contain_exactly(
               ann_klass.new(123, 456),
               ann_klass2.new('xx', 'yy')
             )
           end
         end
       end
+    end
+  end
+
+  describe '.annotations_for' do
+    let(:ann_klass) { Struct.new(:a, :b) }
+
+    before do
+      ann_klass = self.ann_klass
+      klass.class_eval do
+        ann ann_klass, 123, 456
+        def meth
+        end
+      end
+    end
+
+    it 'returns method annotations' do
+      expect(klass.annotations_for(:meth)).to eq [ann_klass.new(123, 456)]
     end
   end
 end
