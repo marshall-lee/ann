@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'anne/version'
+require 'ann/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'anne'
-  spec.version       = Anne::VERSION
+  spec.name          = 'ann'
+  spec.version       = Ann::VERSION
   spec.authors       = ['Vladimir Kochnev']
   spec.email         = ['hashtable@yandex.ru']
 
-  spec.summary       = 'Method annotations'
-  spec.homepage      = 'https://github.com/marshall-lee/anne'
+  spec.summary       = 'Nothing special, just method annotations done right!'
+  spec.homepage      = 'https://github.com/marshall-lee/ann'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.start_with? 'spec/' }
   spec.require_paths = ['lib']

@@ -1,8 +1,8 @@
-# Anne
+# Ann
 
-[![Build Status](https://travis-ci.org/marshall-lee/anne.svg)](https://travis-ci.org/marshall-lee/anne)
+[![Build Status](https://travis-ci.org/marshall-lee/ann.svg)](https://travis-ci.org/marshall-lee/ann)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/anne`. To experiment with that code, run `bin/console` for an interactive prompt.
+Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ann`. To experiment with that code, run `bin/console` for an interactive prompt.
 
 TODO: Delete this and the text above, and describe your gem
 
@@ -11,7 +11,7 @@ TODO: Delete this and the text above, and describe your gem
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'anne'
+gem 'ann'
 ```
 
 And then execute:
@@ -20,7 +20,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install anne
+    $ gem install ann
 
 ## Usage
 
@@ -34,5 +34,5 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/marshall-lee/anne.
+Bug reports and pull requests are welcome on GitHub at https://github.com/marshall-lee/ann.
 

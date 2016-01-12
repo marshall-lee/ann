@@ -1,15 +1,14 @@
-require 'anne/version'
+require 'ann/version'
 require 'thread'
 
-module Anne
+module Ann
   Descriptor = Struct.new(:klass, :args)
 
-  def anne(*args)
+  def ann(*args)
     klass, *args = args
-    Thread.current[:anne_descriptors] ||= []
-    Thread.current[:anne_descriptors] << Descriptor.new(klass, args)
+    Thread.current[:ann_descriptors] ||= []
+    Thread.current[:ann_descriptors] << Descriptor.new(klass, args)
   end
-  alias ann anne
 
   def annotations
     @annotations ||= Hash.new { |hash, key| hash[key] = [] }
@@ -20,12 +19,12 @@ module Anne
   end
 
   def method_added(name)
-    method_anns = (Thread.current[:anne_descriptors] || []).map do |desc|
+    method_anns = (Thread.current[:ann_descriptors] || []).map do |desc|
       desc.klass.new(self, name, *desc.args)
     end
     annotations[name].concat(method_anns)
 
-    Thread.current[:anne_descriptors] = nil
+    Thread.current[:ann_descriptors] = nil
   end
 
   def inherited(subclass)

@@ -1,23 +1,19 @@
 require 'spec_helper'
 
-describe Anne do
+describe Ann do
   it 'has a version number' do
-    expect(Anne::VERSION).not_to be nil
+    expect(Ann::VERSION).not_to be nil
   end
 
   let(:klass) do
     Class.new do
-      extend Anne
+      extend Ann
     end
   end
 
-  describe 'class with Anne mixin' do
-    it 'should be a kind of Anne' do
-      expect(klass).to be_kind_of(Anne)
-    end
-
-    it 'should respond to method anne' do
-      expect(klass).to respond_to(:anne)
+  describe 'class with Ann mixin' do
+    it 'should be a kind of Ann' do
+      expect(klass).to be_kind_of(Ann)
     end
 
     it 'should respond to method ann' do
